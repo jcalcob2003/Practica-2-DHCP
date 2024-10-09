@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
 
 
     # Configuración de la red (IP estática en la red privada)
-    c1.vm.network "private_network", ip: "192.168.57.11"
+    c1.vm.network "private_network", type: "dhcp"
   end
 
   # Configuración de la máquina cliente c2 (IP estática en la misma red)
@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
     c2.vm.box = "ubuntu/bionic64"
 
     # Configuración de la red (IP estática en la red privada)
-    c2.vm.network "private_network", ip: "192.168.57.12"
+    c2.vm.network "private_network", type: "dhcp"
   end
 
 end

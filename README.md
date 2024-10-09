@@ -29,7 +29,20 @@ Antes de comenzar, asegúrate de tener instalado:
 Levanta las tres máquinas virtuales (dhcp-server, c1 y c2) con el siguiente comando: **vagrant up**
 
 ## 2. Configurar el servidor DHCP
-Accede a la máquina dhcp-server para comenzar su configuración: **vagrant ssh dhcp-server**
-Instalar el servicio DHCP: **sudo apt install isc-dhcp-server**
-Edita el archivo /etc/default/isc-dhcp-server para configurar la interfaz de red que utilizará el servidor DHCP **INTERFACESv4="TU-TARGETA-DE-RED"**
-Edita el archivo /etc/dhcp/dhcpd.conf para configurar el rango de direcciones IP que se asignarán dinámicamente, y otros parámetros de red (Archivo
+-Accede a la máquina dhcp-server para comenzar su configuración: **vagrant ssh dhcp-server** <br>
+-Instalar el servicio DHCP: **sudo apt install isc-dhcp-server** <br>
+-Edita el archivo /etc/default/isc-dhcp-server para configurar la interfaz de red que utilizará el servidor DHCP **INTERFACESv4="TU-TARGETA-DE-RED"** <br>
+-Edita el archivo /etc/dhcp/dhcpd.conf para configurar el rango de direcciones IP que se asignarán dinámicamente, y otros parámetros de red **(Archivo 'isc-dhcp-server')** <br>
+-Reinicia el servicio DHCP para aplicar la configuración: **sudo systemctl restart isc-dhcp-server** <br>
+-Verifica que el servicio está funcionando correctamente: **sudo systemctl status isc-dhcp-server** <br>
+
+## 3. Configurar los clientes DHCP
+-Accede a las máquinas cliente (c1 y c2): **vagrant ssh c1 / c2** <br>
+-En ambas máquinas, ejecuta el siguiente comando para solicitar una dirección IP al servidor DHCP: **sudo dhclient** <br>
+-Para comprobar la dirección IP asignada por el servidor DHCP, utiliza el siguiente comando: **ip a** <br>
+
+## 4. Configurar IP fija basada en la dirección MAC para c2
+-Modificar el archivo **dhcpd.conf** en **dhcp-server**. Agrega la siguiente configuración al archivo **/etc/dhcp/dhcpd.conf** para asignar una IP fija a c2 basada en su dirección MAC **(Archivo 'isc-dhcp-server')** <br>
+-Reinicia el servicio DHCP para aplicar los cambios: **sudo systemctl restart isc-dhcp-server** <br>
+-En la máquina c2, libera la dirección IP actual y solicita una nueva IP al servidor: **sudo dhclient -r** y **sudo dhclient** <br>
+-Comprueba la nueva dirección IP y los servidores DNS asignados a c2: **ip a** **cat /etc/resolv.conf** <br>

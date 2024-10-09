@@ -6,12 +6,10 @@ Este repositorio contiene una práctica para configurar un servidor DHCP y dos m
 
 1. [Descripción General](#descripción-general)
 2. [Requisitos](#requisitos)
-3. [Configuración del Entorno](#configuración-del-entorno)
-4. [Configuración del Servidor DHCP](#configuración-del-servidor-dhcp)
-5. [Configuración de los Clientes](#configuración-de-los-clientes)
-6. [Asignación de IP Fija Basada en MAC](#asignación-de-ip-fija-basada-en-mac)
-7. [Comandos Útiles](#comandos-útiles)
-8. [Referencias](#referencias)
+3. [Levantar entorno Vagrant](#levantar-entorno-vagrant)
+4. [Configurar el servidor DHCP](#configuración-del-servidor-dhcp)
+5. [Configurar los clientes DHCP](#configuración-de-los-DHCP)
+6. [Configurar IP fija basada en la dirección MAC para c2](#configurar-ip-fija-basada-en-la-direccion-MAC-para-c2)
 
 ## Descripción General
 
@@ -25,10 +23,10 @@ Antes de comenzar, asegúrate de tener instalado:
 - **VirtualBox** (o el proveedor de máquinas virtuales compatible con Vagrant): [Descargar VirtualBox](https://www.virtualbox.org/)
 - **Git**: [Descargar Git](https://git-scm.com/)
 
-## 1. Levantar el entorno con Vagrant
+## Levantar el entorno con Vagrant
 Levanta las tres máquinas virtuales (dhcp-server, c1 y c2) con el siguiente comando: **vagrant up**
 
-## 2. Configurar el servidor DHCP
+## Configurar el servidor DHCP
 -Accede a la máquina dhcp-server para comenzar su configuración: **vagrant ssh dhcp-server** <br>
 -Instalar el servicio DHCP: **sudo apt install isc-dhcp-server** <br>
 -Edita el archivo /etc/default/isc-dhcp-server para configurar la interfaz de red que utilizará el servidor DHCP **INTERFACESv4="TU-TARGETA-DE-RED"** <br>
@@ -36,12 +34,12 @@ Levanta las tres máquinas virtuales (dhcp-server, c1 y c2) con el siguiente com
 -Reinicia el servicio DHCP para aplicar la configuración: **sudo systemctl restart isc-dhcp-server** <br>
 -Verifica que el servicio está funcionando correctamente: **sudo systemctl status isc-dhcp-server** <br>
 
-## 3. Configurar los clientes DHCP
+## Configurar los clientes DHCP
 -Accede a las máquinas cliente (c1 y c2): **vagrant ssh c1 / c2** <br>
 -En ambas máquinas, ejecuta el siguiente comando para solicitar una dirección IP al servidor DHCP: **sudo dhclient** <br>
 -Para comprobar la dirección IP asignada por el servidor DHCP, utiliza el siguiente comando: **ip a** <br>
 
-## 4. Configurar IP fija basada en la dirección MAC para c2
+## Configurar IP fija basada en la dirección MAC para c2
 -Modificar el archivo **dhcpd.conf** en **dhcp-server**. Agrega la siguiente configuración al archivo **/etc/dhcp/dhcpd.conf** para asignar una IP fija a c2 basada en su dirección MAC **(Archivo 'isc-dhcp-server')** <br>
 -Reinicia el servicio DHCP para aplicar los cambios: **sudo systemctl restart isc-dhcp-server** <br>
 -En la máquina c2, libera la dirección IP actual y solicita una nueva IP al servidor: **sudo dhclient -r** y **sudo dhclient** <br>
